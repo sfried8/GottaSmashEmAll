@@ -1,0 +1,40 @@
+.Fighter,
+.emptyslot {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+    padding: 15px;
+    align-items: center;
+    width: 80%;
+    border: 1px solid #eee;
+    border-radius: 3px;
+
+    /* box-shadow: 3px 3px 6px #ccc; */
+    text-align: left;
+    margin: auto;
+}
+img {
+    height: 100%;
+    filter: grayscale(100%) sepia(60%);
+}
+
+.rocker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    width: 80%;
+}
+
+.outerHealth {
+    width: 75%;
+    border-left:solid black 25px;
+    border-right:solid black 10px;
+    border-bottom: solid black 4px;
+    overflow: hidden;
+}
+.innerHealth {
+    height: 5px;
+    border-top:solid white 3px;
+    border-bottom:solid white 2px;
+}
