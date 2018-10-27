@@ -1,0 +1,8 @@
+.messageBox {
+    background-image: url("../assets/MessageBox.png");
+    background-size: cover;
+    width: 395px;
+    height: 115px;
+    padding: 30px;
+    margin: 40px auto;
+}

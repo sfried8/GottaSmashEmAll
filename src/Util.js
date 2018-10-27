@@ -16,5 +16,9 @@ export default {
         }
 
         return array;
-    }
+    },
+    isSorted: function isSorted(arr) {
+  const limit = arr.length - 1;
+  return arr.every((_, i) => (i < limit ? arr[i] <= arr[i + 1] : true));
+}
 };

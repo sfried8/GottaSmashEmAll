@@ -3,12 +3,45 @@ import Fighter from "../Fighter/Fighter";
 import "./Player.css";
 import fighterData from "../FighterData";
 import Autocomplete from "react-autocomplete";
+import Util from "../Util";
 
 class Player extends Component {
     state = {
         pendingValue: ""
     };
+    sortItems = (itemA, itemB, value) => {
+        if (!value) {
+            return itemA.name < itemB.name
+                ? -1
+                : itemA.name === itemB.name
+                    ? 0
+                    : 1;
+        }
+        const valueChars = [...value.toUpperCase()];
 
+        const mapFunc = item => v => item.name.toUpperCase().indexOf(v);
+        const charIndexesA = valueChars.map(mapFunc(itemA));
+        const charIndexesB = valueChars.map(mapFunc(itemB));
+
+        const differenceReducer = (acc, cur, idx, src) =>
+            idx < src.length - 1 ? acc + (src[idx + 1] - cur) : acc;
+        const sum = arr => arr.reduce((acc, cur) => acc + cur, 0);
+
+        const deltaSumA = charIndexesA.reduce(differenceReducer, 0);
+        const deltaSumB = charIndexesB.reduce(differenceReducer, 0);
+        console.log({
+            a: itemA.name,
+            b: itemB.name,
+            charIndexesA,
+            charIndexesB,
+            deltaSumA,
+            deltaSumB
+        });
+        if (deltaSumA === deltaSumB) {
+            return charIndexesA[0] - charIndexesB[0];
+        }
+        return deltaSumA - deltaSumB;
+    };
     getFighterArray = () => {
         const fighterArray = [...this.props.fighters];
         while (fighterArray.length < this.props.numSlots) {
@@ -20,7 +53,7 @@ class Player extends Component {
         return (
             <div className="Player">
                 <h1>{this.props.name}</h1>
-                
+
                 {this.getFighterArray().map(
                     (f, i) =>
                         f ? (
@@ -60,13 +93,21 @@ class Player extends Component {
                                 {item.name}
                             </div>
                         )}
-                        shouldItemRender={(item, value) =>
-                            value &&
-                            item.name
-                                .toLowerCase()
-                                .replace(/[^a-zA-z]/g, "")
-                                .indexOf(value.toLowerCase()) > -1
-                        }
+                        shouldItemRender={(item, value) => {
+                            if (!value) {
+                                return false;
+                            }
+                            const valueChars = [...value.toUpperCase()];
+                            const charIndexes = valueChars.map(v =>
+                                item.name.toUpperCase().indexOf(v)
+                            );
+                            console.log(charIndexes);
+                            return (
+                                charIndexes.every(v => v >= 0) &&
+                                Util.isSorted(charIndexes)
+                            );
+                        }}
+                        sortItems={this.sortItems}
                         value={this.state.pendingValue}
                         onChange={e =>
                             this.setState({ pendingValue: e.target.value })
@@ -79,7 +120,7 @@ class Player extends Component {
                         }}
                     />
                     <div
-                        style={{ display: "inline-block" }}
+                        style={{ display: "inline-block", marginLeft: "10px" }}
                         onClick={this.props.onRandomClicked}
                     >
                         Random

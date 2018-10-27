@@ -9,7 +9,8 @@
     font-family: "Pokemon";
     /* background-color: #ffefff; */
     color: #181010;
-    width: 100vw;
+    width: 63vw;
+    margin:auto;
     text-transform: uppercase;
 }
 
